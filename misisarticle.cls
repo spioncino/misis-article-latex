@@ -15,7 +15,9 @@
 %
 % This work consists of the file misisarticle.cls.
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{misisarticle}[2026/08/23 v1.1 MISiS article template]
+% Locally modified copy: optional Linux OpenType font fallback added.
+% Original maintained class: https://github.com/sadekovlar/misis-article-latex
+\ProvidesClass{misisarticle}[2026/11/03 v1.1-local MISiS article template, modified font fallback]
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
@@ -83,6 +85,28 @@
   ]%
   \newfontfamily\cyrillicfonttt{Courier New}%
 }{%
+  % Local portability addition, 2026-11-03: use an installed Cyrillic
+  % Times-compatible family before the bundled TeX Gyre fallback.
+  \IfFileExists{/usr/share/fonts/opentype/urw-base35/NimbusRoman-Regular.otf}{%
+    \setmainfont{NimbusRoman}[
+      Path=/usr/share/fonts/opentype/urw-base35/,Extension=.otf,
+      UprightFont=*-Regular,BoldFont=*-Bold,
+      ItalicFont=*-Italic,BoldItalicFont=*-BoldItalic,
+      SmallCapsFont=*-Regular,Ligatures=TeX]
+    \newfontfamily\cyrillicfont{NimbusRoman}[
+      Path=/usr/share/fonts/opentype/urw-base35/,Extension=.otf,
+      UprightFont=*-Regular,BoldFont=*-Bold,
+      ItalicFont=*-Italic,BoldItalicFont=*-BoldItalic,
+      SmallCapsFont=*-Regular,Ligatures=TeX]
+    \newfontfamily\cyrillicfontsf{NimbusSans}[
+      Path=/usr/share/fonts/opentype/urw-base35/,Extension=.otf,
+      UprightFont=*-Regular,BoldFont=*-Bold,
+      ItalicFont=*-Italic,BoldItalicFont=*-BoldItalic]
+    \newfontfamily\cyrillicfonttt{NimbusMonoPS}[
+      Path=/usr/share/fonts/opentype/urw-base35/,Extension=.otf,
+      UprightFont=*-Regular,BoldFont=*-Bold,
+      ItalicFont=*-Italic,BoldItalicFont=*-BoldItalic]
+  }{%
   % Если Times New Roman не установлен (обычный Linux), fontconfig не видит
   % семейство «TeX Gyre Termes», пока файлы не открыты по имени из бандла Tectonic.
   \setmainfont{texgyretermes}[
@@ -115,6 +139,7 @@
     ItalicFont=*-italic,
     BoldItalicFont=*-bolditalic,
   ]%
+}
 }
 
 \setlength{\parindent}{0.51cm}
